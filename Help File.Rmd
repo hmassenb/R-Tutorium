@@ -1,0 +1,84 @@
+---
+title: "Help file on how to find help"
+author: "Hannah Massenbauer"
+date: "24 2 2024"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## How to find help 
+
+When I started working with R I received all the time errors and nothing worked. This was quit frustrating and after some years and experience I tried R again and suddenly things worked out. I want to give you an overview what helps me to deal with errors and other problems, which occur when working with R.
+
+### 1. Tip: Use ChatGPT
+
+Especially, in the beginning it can be super helpful to get to know the most important commands and to get a feeling how R works. But, be aware, how you pose your questions can have a great impact on the answer you receive. Also ChatGPT will not replace your duty of thinking about what you want / have to do. Sometimes it errs, but based on the error in the console window you can copy + paste that back in ChatGPT and in many cases ChatGPT is able to fix these errors. For basic problems, which I faced especially in the beginning it is definitely the most helpful tool to solve problems.
+
+### 2. Tip: Help within R
+
+For many commands you can find help within R by typing "?" in front of the command.
+
+```{r}
+?print
+?min
+
+```
+
+This is super simple and helps especially with syntax problems. Syntax problems could imply missing on a comma or having a wrong order in the command, which results in an error message.
+
+This approach is also recommendable if you want to figure out, what the command can do and what not. In R there are 1000 ways (that's maybe exaggerated) to achieve a solution, and not every command will always be able to do exactly what you need. Thus, check the possibilities of your command in the help file.
+
+### 3. Tip: Google 
+
+##### General Questions: 
+
+Many people before you have started learning R. Therefore, most of the questions you have, were likely posed before by others as well. There exist some forums, in which you can pose questions and receive answers from other R-users. "Stackoverflow" (<https://stackoverflow.com/questions/tagged/r>) is the most used forum for R questions, but there exist other websites as well. A brief guide on stackoverflow + other resources you can find here: <https://www.rforecology.com/post/where-to-ask-for-help-when-coding-in-r/>.
+
+The website <https://cran.r-project.org/> contains an overview of the newest packages and commands and especially handy are the manuals they offer. At the beginning it might look confusing, but when you google for help you will stumble across their pages and find something like this: <https://cran.r-project.org/web/packages/Hmisc/index.html> . To find the help file you click on the "Reference manual", which opens a pdf document with detailed information on packages.
+
+Maybe a bit more advanced place to search for help is Github (<https://github.com/>). It is useful for coding since you can collaborate with others on the same code and upload your codes such that you have access to all your codes also in the future. You can also search for commands or packages within the platform and most users will provide an explanation file at the same place.
+
+Depending on your interest, or whatever you have to do for a homework you can google also for specific topics. For example, I like econometrics and to discover what R codes exist I google "R econometrics" and I discovered this amazing page: Econometrics related: <https://www.econometrics-with-r.org/1-introduction.html>. Another website I can recommed is "Medium". I found the following [https://medium.com/\@josef.waples/causal-inference-in-r-using-mtcars-47cb167f9432](https://medium.com/@josef.waples/causal-inference-in-r-using-mtcars-47cb167f9432) link as an example. One thing I want to point out for all these unofficial online resources is, however, that there is no guarantee that they are 100% correct and it can happen that there is a mistake. So remain aware, about what you see and what you want to do.
+
+To sum up, there exist numerous sources and with time passing you will see which pages and formats suits your learning progress the best. When you don't understand something it depends probably on the way it is explained and not on you.
+
+##### Specific Package Questions: 
+
+When your R journey continuous, you will discover new packages. At the beginning it can be confusing which package can do what. To learn what a specific package is capable of, I would recommend google the package and you will most likely find a nice website with an explanation of the package.
+
+Below I provide you an overview of the most important packages + a link to their website so you can find easily help during this course or also in your future career:
+
+The probably most important overview for packages are the tidyverse packages (<https://www.tidyverse.org/packages/>) which comprises multiple packages such as:
+
+1.  Readr: Importing data (e.g. csv)
+
+    <https://readr.tidyverse.org/>
+
+2.  Dplyr : Data wrengling
+
+    <https://dplyr.tidyverse.org/>
+
+3.  Ggplot: Best graph command
+
+    <https://ggplot2.tidyverse.org/reference/ggplot.html>
+
+4.  Tibble: Dataset format
+
+    <https://tibble.tidyverse.org/>
+
+But there exist other packages as well like:
+
+1.  Data.table: <https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html> (very fast way to work with data)
+
+2.  Overview: [https://support.posit.co/hc/en-us/articles/201057987-Quick-list-of-useful-R-package](https://support.posit.co/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages)
+
+### 4. Tip: Don't make easy things hard
+
+Always try to make things as easy as possible. What I mean by that, is that independent how hard your problem is, try to break it down. Before attempting to analyze data or execute calculations start by thinking what is the most straight forward way you can do it, if you can imagine it, then you can do it! The biggest problem is if you don't know what you want to do exactly, because searching for solutions will be way easier if you know what your problem is.
+
+Another tip which makes things easier is to reuse code. If you have one command / package with which you are familiar, just reuse it in the future.
+
+Also if you know that a friend has dealt with similar problems, ask them and just swap codes. You don't have to do everything on your own :)
