@@ -53,30 +53,32 @@
   
 
  
-######################### ### Vectors and matrices #############################
+############################# Vectors and matrices #############################
 
   # Vector 
   
   k1 <- c(1,1,2,3,3,3,4) # in this case its a vector containing integers (whole number, without decimals)
   
+  # Breakdown. c binds several values together and with the <- we assign the vector to the name "k1"
+  
   # Basically, all variables are vectors, when you think about it. You observe one characteristica e.g. age (1) for n people 
   # this results in a (n x 1) vector
 
   
+
   # Matrices 
   
+  # create some more vectors
   k2 <- c(2,3,5,6,6,8,7) 
   k3 <- c(4,8,2,6,4,4,0)
   
-  # obtain the matrix
-   
+  # bind vectors together
   matrix <- cbind(k1,k2,k3) # 7 x 3 matrix 
   
   # cbind command = binds columns together. Watch out, they have to be of equal length!
+
   
-  
-  # Datasets are like matrices 
-  
+  # Datasets are a matrix
   # Give columns new meaning 
   colnames(matrix)[colnames(matrix) == "k1"] <- "ID" # implies how many kids exist per HH
   colnames(matrix)[colnames(matrix) == "k2"] <- "Age" # Age of kid
@@ -90,12 +92,12 @@
   
   Books_children <- matrix # rename matrix 
   
-  rm(matrix, k1, k2, k3) # keep workspace clean
+  # Now you can interpret the values differently -> they got a meaning
   
   Books_children$Age # Doesn't work yet
   
   
-  ################## Intro to various kinds of datasets in R   ################# 
+  ################ Intro to various ways to store datasets in R   ############### 
   
   # Data frame 
   df <- data.frame(Books_children) 
@@ -110,54 +112,95 @@
   
   df$Age # now it works :) 
   
+  # R stores information differently, depending on how you create and store objects
   
-########################### Understanding dataset 2.0 ###########################
+  # class command = super useful to understand how objects are stored
   
-#########################    
+  class(Books_children)
+  
+  class(df)
+  
+  class(dt)
+
+  
+################# Intro to various variables of datasets in R   ################
+
+  # numbers   
+  
+  a <- 1
+  
+  b <- 1.1
+  
+  # What about other characters?
+  
+  c <- "Hi" 
+  
+  # For other forms of information we can use "" to mark that its not a number
+  
+  
+  # class can be also applied to variables
+  
+  class(a)
+  
+  class(c)
+  
+  
+########################### Understanding dataset  ###########################
+  
+ 
 # 1) table  
-######################### 
   
   table(Books_children) 
   
   # shows all elements of our data
-  
-#########################   
+
+   
 # 2) sort 
-#########################   
   
   sort(Books_children$Age) # ! 
   
 # What could be wrong? 
   sort(?$Age)
  
-#########################    
-# 3) Descriptives basic  
-#########################  
+    
+# 3) Descriptive basic  
  
   max(df$Age) # maximum age
   
   min(df$Age) # minimum age
   
-  summary(df)   # info of whole dataset 
+  summary(df)   # info of whole data frame 
   
   summary(df$Kids.per.HH) # info about one variable of dataset
   
   
-#########################    
 # 4) Plot 
-#########################  
-
-# Understanding data by just looking at it becomes pretty fast unfeasible with
-# an increasing sample size, thus it helps to depict data graphically (or in general)
-  
-  plot(Books_children)
-  
-  # What can you see? How does that relate to our data? 
-  
  
-
+# Patterns in data are easier to catch when you can see it 
   
-
+  plot(Books_children)  # What can you see? How does that relate to our data? 
+  
+  
+  # Choose variables for plot
+  
+  plot(df$Age, df$Books) 
+  
+  # recall R demands for many functions that the data is stored as a data frame
+  # therefore, i use 
+  
+  
+  # you can modify your graphs
+  
+  plot(df$Age, df$Books,
+       pch = 16,          # Fills circles
+       col = "darkgreen",   # Point color
+       xlab = "Age",      # x-axis label
+       ylab = "Number of Books",  # y-axis label
+       main = "Books by Age",       # Title
+       las = 1             # Rotate y-axis labels by 90 degrees
+  )
+  
+  # Plots should be as self-explaining as possible!
 
 
 
