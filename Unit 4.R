@@ -69,7 +69,13 @@ linear_model <- lm(r_skills_change ~ tutorium_attendance, data = participants)
 
 # Look at the outcome 
 linear_model
+
+# Export regression table
 stargazer(linear_model)
+
+
+linear_model_2 <- lm(r_skills_after ~ tutorium_attendance + learning_hours, data = participants)
+
 
 # Fixed Effects Model (load plm package)
 
