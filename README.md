@@ -1,8 +1,9 @@
 # R-Tutorium
 
-In this repositorium you find all the materials for the tutorium
+To download R and R Studio follow this guide: https://www.datacamp.com/tutorial/r-studio-tutorial
 
-You can find the codes from class and a help file.
+In this repositorium you find all the materials for the tutorium
+You can find the codes and data from class and a help file.
 
 Class material: 
   1) Introduction
