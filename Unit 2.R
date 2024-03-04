@@ -1,6 +1,6 @@
 ################################################################################
 #                 R-Tutorial WU 2022 - Hannah Massenbauer                      #
-#                                Descriptives                                  #
+#                             Unit 2 - Descriptives                            #
 ################################################################################
 
 
@@ -8,15 +8,21 @@
 
 # Packages enable specific codes which can help you achieving your goal faster
 
-# Most important package (https://tidyverse.org/)
+  install.packages("tidyverse") # install package - can also be searched for in the right bottom window under "packages"
 
-  install.packages("tidyverse") # install package 
   library(tidyverse) # if installed you can simply recall it
+
+  # Tip: 
+  # Look into the bottom right window and go to "Packages" -> "Install" and then
+  # search for the package. Under "package" you can also tick the check box 
+  # instead of the library() command
+
 
 # Things to consider: Order of packages loaded, same command names (fixed by adding e.g. tidyverse:: in front)
 
 
-############################# Load data  #######################################
+
+############################## Get path  #######################################
 
 # set path (to the place were your files are stored)
 
@@ -28,7 +34,7 @@
 # Note: Windows user have to add a second slash "\\" or change toward forward slash "/"
 
   
-# load data
+############################# Load data  #######################################
   
   data <- read.csv("personal_test.csv") 
   
@@ -36,9 +42,9 @@
 
 # load data such that we can use it 
   
-  data <- read.csv("personal_test.csv",  sep = ";", header = TRUE) 
+  data <- read.csv("personal_test.csv",  sep = ";", header = TRUE) # sep = what seperates data, header = TRUE implies using the var names
 
-# attention how data is stored_  
+# attention how data is stored:  
   # for csv: read.csv("datasetname.csv")  
   # for xlsx: read.xlsx("datasetname.xlsx")
   # for dta: read_dta("datasetname.dta")
@@ -54,11 +60,10 @@
   data$Gender
   
 
-############################ Use dplyr ##################################
+#################################  Use dplyr  ##################################
 
-############################ 
-# Select columns
-############################ 
+###############################  Select columns  ###############################
+
 
   data_Gender <- data %>% 
     select(Age)
@@ -71,10 +76,9 @@
 # You can link functions with it, just like a pipe connects two places 
 # Like in this examples it connects the select command with the information on which dataset this command should be applied to 
   
+ 
+################################# Filter data  ################################# 
 
-############################ 
-# Filter data
-############################ 
   
   data_W <- data %>% 
     filter(Gender == "W") # creates a subset containing only persons with an assigned W 
@@ -86,36 +90,45 @@
   View(data_M)
   
   
-############################ 
-# summarize 
-############################ 
+############################## Summarize data  ################################# 
   
-# get the mean using the mean function 
+# obtain the mean 
   
   mean_age_W <- data_W %>%
-    summarize(mean_age = mean(Age))
+    summarize(mean_age = mean(Age)) # calculate the mean_x = mean(x) 
   
   mean_age_M <- data_M %>%
     summarize(mean_age = mean(Age))
 
+  # mean() resembles a function in R. 
+  # function = define what R should do with an input
+  # depending on function you receive specified output for a certain input
+  # E.g. mean function = for a certain variable (Age) you get as output the mean of Age
+
 # get standard deviation
   
   sd_age_W <- data_W %>%
-    summarize(mean_age = sd(Age))
+    summarize(sd_age = sd(Age))
   
   sd_age_M <- data_M %>%
-    summarize(mean_age = sd(Age))
+    summarize(sd_age = sd(Age))
+  
+  # here we use the function sd() to obtain the standard deviation of Age
+  
+  
+# Look at the output
   
   print(mean_age_W$mean_age)
   
-  print(mean_age_M$mean_age) 
+  print(sd_age_W)
   
 
-############################ 
-# Mutate = creates a variable
-############################ 
+############################### Mutate data #################################### 
+
+  # creates new variable
   
   data <- mutate(data, Gender_binary = ifelse(Gender == "M", 0, 1)) 
+  
 
 # Breakdown of code: 
 # 
@@ -138,6 +151,8 @@
  
 # Remember: Don't make easy things hard :) 
 
+# Base R offers already some straightforward options 
+  
   mean_age_W <- mean(data_W$Age)
   
   mean_age_M <- mean(data_M$Age)
@@ -150,7 +165,7 @@
   
   sd_age_M <- sd(data_M$Age)
 
-# there are no wrong ways, but more and less efficient ways
+# there are not really wrong ways, but more and less efficient ways
 
   final_data <- data %>%             # indicates dataset 
     
@@ -175,7 +190,8 @@
   
   write_dta(final_data, file = "final_data.dta")
   
-
+ 
+  # Breakdown: save(datset name in R, file = "(specifiy how it shall be stored).(dataset type)")
 
 
 ############################ Keep data clean ###################################
@@ -186,7 +202,7 @@
   
   mean_age_M <- round(mean_age_M, digits = -1)
 
- # Remove objects you dont need anymore 
+ # Remove objects you don't need anymore 
   
   rm(data_Gender)
   
@@ -201,11 +217,18 @@
 ################################### Exercise ###################################   
   
 
-# Use any dataset from this class
+# Use any dataset 
+  
+  library(help='datasets') # datasets directly included in R
+  
+  # pick any (Tip to load data: data <- Name of Dataset)
+  
+  # To check what variables are included use head(dataset name)
+  
   
 # 1) load data
-  
-  
+
+
 # 2) Which data do we see? How is the structure? Which variables are used?
   
 

@@ -80,7 +80,7 @@
   
   # Datasets are a matrix
   # Give columns new meaning 
-  colnames(matrix)[colnames(matrix) == "k1"] <- "ID" # implies how many kids exist per HH
+  colnames(matrix)[colnames(matrix) == "k1"] <- "ID" # indicates in which HH kid lives
   colnames(matrix)[colnames(matrix) == "k2"] <- "Age" # Age of kid
   colnames(matrix)[colnames(matrix) == "k3"] <- "Books" # number of books per kid 
   

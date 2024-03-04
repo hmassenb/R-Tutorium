@@ -13,22 +13,6 @@ library(magrittr)
 
 setwd()
 
-# add this to supplemental material!
-set.seed(123)
-participants <- data.frame(
-  tutorium_attendance = sample(0:4, 100, replace = TRUE),
-  r_skills_before = rnorm(100, mean = 50, sd = 10), 
-  r_skills_change = rnorm(100, mean = 0, sd = 1),
-  learning_hours = rnorm(100, mean = 10, sd = 3),
-  grade_change = rnorm(100, mean = 0, sd = 1),
-  program = factor(sample(c("Philosophy", "Informatics", "Economics"), 100, replace = TRUE))
-)
-
-# Calculate r_skills_after separately
-participants$r_skills_after <- participants$r_skills_before + participants$r_skills_change
-
-
-save(participants, file="participants.csv")
 #######################################################################
 
 data <- load("participants.csv")
@@ -68,14 +52,14 @@ linear_model <- lm(r_skills_change ~ tutorium_attendance, data = participants)
 # 3) dataset used = data
 
 # Look at the outcome 
-linear_model
+summary(linear_model)
 
 # Export regression table
 stargazer(linear_model)
 
 
 linear_model_2 <- lm(r_skills_after ~ tutorium_attendance + learning_hours, data = participants)
-
+summary(linear_model_2)
 
 # Fixed Effects Model (load plm package)
 
