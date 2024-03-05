@@ -64,22 +64,21 @@
     )
     
     # Add learning effect by attending tutorium
-    participants$r_skills_change <- participants$r_skills_change + 0.25 * participants$tutorium_attendance
+    participants$r_skills_change <- participants$r_skills_change + 0.4 * participants$tutorium_attendance
   
     
     # Create level differences between programs
     desired_order <- c("Informatics", "Economics", "Philosophy")
     participants$program <- factor(participants$program, levels = desired_order)
     participants <- participants[order(participants$program, participants$r_skills_change), ]
-    
-    # Add r_skills_after 
-    participants$r_skills_after <- participants$r_skills_before + participants$r_skills_change
+  
     
     # Add that learning effort matters
     participants$learning_hours <- participants$learning_hours + rnorm(120, mean = 0, sd = 1)
-    participants$r_skills_change <- participants$r_skills_change + exp(0.2 * participants$learning_hours)
+    participants$r_skills_change <- participants$r_skills_change + 0.2 * participants$learning_hours + rnorm(120, mean = 0, sd = 1)
 
-    
+    # Add r_skills_after 
+    participants$r_skills_after <- participants$r_skills_before + participants$r_skills_change
     
     save(participants, file="participants.csv")
     
