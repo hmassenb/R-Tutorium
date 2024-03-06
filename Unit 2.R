@@ -184,14 +184,9 @@
   
   save(final_data, file = "final_data.csv")
   
-  # as dta file 
-  
-  library(haven) # required to use .dta files
-  
-  write_dta(final_data, file = "final_data.dta")
-  
  
   # Breakdown: save(datset name in R, file = "(specifiy how it shall be stored).(dataset type)")
+  
 
 
 ############################ Keep data clean ###################################
@@ -214,10 +209,10 @@
   
   
   
-################################### Exercise ###################################   
+  ################################### Exercise ###################################   
   
-
-# Use any dataset 
+  
+  # Use any dataset 
   
   library(help='datasets') # datasets directly included in R
   
@@ -226,25 +221,25 @@
   # To check what variables are included use head(dataset name)
   
   
-# 1) load data
-
-
-# 2) Which data do we see? How is the structure? Which variables are used?
-  
-
-# 3) How is the data stored? 
+  # 1) load data
   
   
-# 4) Compute descriptive values (min, max, mean, median)
+  # 2) Which data do we see? How is the structure? Which variables are used?
   
   
-# 5) What can you say about the dispersion of the data? (Tip: either numerically or graphically)
+  # 3) How is the data stored? 
   
   
-# 6) Create a dataset containing only the summary statistics per unit (ID, person, HH)
+  # 4) Compute descriptive values (min, max, mean, median)
   
   
-# 7) Save data set 
+  # 5) What can you say about the dispersion of the data? (Tip: either numerically or graphically)
+  
+  
+  # 6) Create a dataset containing only the summary statistics per unit (ID, person, HH)
+  
+  
+  # 7) Save data set 
   
   
   
