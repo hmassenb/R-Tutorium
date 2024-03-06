@@ -27,78 +27,87 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   summary(participants)
 
 # what can you say about median, min, max, outliers?
+  
 # before 
-ggplot(participants, aes(x = r_skills_before, fill = program)) +
-  geom_density(alpha = 0.5) +
-  labs(title = "Kernel Density Estimate of R Skills Before",
-       x = "R Skills",
-       y = "Density") +
-  theme_minimal() + 
-  theme(legend.position = "bottom",
-        legend.box = "horizontal",
-        plot.title = element_text(hjust = 0.5))
+  ggplot(participants, aes(x = r_skills_before, fill = program)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Kernel Density Estimate of R Skills Before",
+         x = "R Skills",
+         y = "Density") +
+    theme_minimal() + 
+    theme(legend.position = "bottom",
+          legend.box = "horizontal",
+          plot.title = element_text(hjust = 0.5))
 
 # after
-ggplot(participants, aes(x = r_skills_after, fill = program)) +
-  geom_density(alpha = 0.5) +
-  labs(title = "Kernel Density Estimate of R Skills Before",
-       x = "R Skills",
-       y = "Density") +
-  theme_minimal() + 
-  theme(legend.position = "bottom",
-        legend.box = "horizontal",
-        plot.title = element_text(hjust = 0.5))
+  ggplot(participants, aes(x = r_skills_after, fill = program)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Kernel Density Estimate of R Skills Before",
+         x = "R Skills",
+         y = "Density") +
+    theme_minimal() + 
+    theme(legend.position = "bottom",
+          legend.box = "horizontal",
+          plot.title = element_text(hjust = 0.5))
 
 
 
 ########################## Linear Regression Model ############################# 
 
-  # OLS can be obtained with the lm command
+# Goal: We are interested in how the skills change by attending the R-Tutorium 
+  
+  
+  # Estimate OLS
 
-  linear_model <- lm(r_skills_change ~ tutorium_attendance, data = participants)
+  linear_model <- lm(r_skills_change ~ tutorium_attendance, 
+                     data = participants)
 
 # Breakdown: 
-# 1) Estimated value (y_hat) = r_skills_change
-#   We are interested in how the skills change
-#
+# 1) Estimated value (y_hat) = r_skills_change  
 # 2) Explanatory / independent variable (x_i) = tutorium attendance
-#    Our model aims to predict how the attendance in the tutorium affects the R skills
-#
-# 3) dataset used = data
+# 3) data = our dataset (participants)
+  
 
   # Print the regression outcome 
   summary(linear_model)
 
   
-  # How to add more independent variables
+  
+#################  How to add more independent variables  ################# 
   
   # We can add multiple explanatory variables with "+"
+  
   linear_model_2 <- lm(r_skills_after ~ tutorium_attendance + learning_hours, data = participants)
   
   summary(linear_model_2)
   
   
   
-  # Alternatives to export regression table
-  
+#################  Export regression table  ################# 
+
+# Efficiency tip:   
   # Export regression results to LaTeX for Overleaf
+  
   stargazer(linear_model_2, title = "Regression Results", header = FALSE, type = "latex", out = "regression_results.tex")
   
-  # Export regression results to Word
-  stargazer(linear_model_2, title = "Regression Results", header = FALSE, type = "text", out = "regression_results.docx")
   
+  # Export regression results to Word
+  
+  stargazer(linear_model_2, title = "Regression Results", header = FALSE, type = "text", out = "regression_results.docx")
   
   
 
 ########################### Fixed Effects Model ################################ 
 
+  
+  # Story: 
   # Students from different programs have different skills and experience
   # It is hard to catch all these factors, but it is likely that students of 
   # the same program exhibit similar factors -> it is time-invariant and group-
   # specific. Thus, we can use program fixed effects to capture these unobserved
   # characteristics
 
-  fe_reg_1 <- plm(r_skills_change ~ tutorium_attendance, # like in OLS
+  fe_reg_1 <- plm(r_skills_change ~ tutorium_attendance,    # plm package
                       data = participants,             
                       index = c("program"),            # we have to indicate the level on which we apply fixed effects
                       model = "within")                # within groups we are considered with unobserved characteristics
@@ -122,11 +131,12 @@ ggplot(participants, aes(x = r_skills_after, fill = program)) +
 # Create scatter plots to illustrate 
 
 # Regular OLS model 
+  
 model1 <-  ggplot(participants, aes(x = learning_hours, y = r_skills_change)) +
     
     geom_point() +                                          # scatter plot layer
     
-    # Add a second layer to show slop of OLS model
+    # Add a second layer to show slope of OLS model
     geom_smooth(method = "lm", se = FALSE) +                # linear fit, resembles beta in regression
     labs(title = "OLS",
          x = "Learning hours",
@@ -134,85 +144,137 @@ model1 <-  ggplot(participants, aes(x = learning_hours, y = r_skills_change)) +
     theme_minimal() +
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5))
-
-# Apply within 
-model2 <-  ggplot(participants, aes(x = learning_hours, y = r_skills_change, 
-                                    color = program)) + # differentiate color by program
-    geom_point() +                                      # scatter plot layer              
-  # Add a second layer to highlight the different slopes
-    geom_smooth(method = "lm", se = FALSE) +            # we have now one slope per program
-    labs(title = "Fixed effect",
-         x = "Learning hours",
-         y = "R Skills Change") +
-   guides(color = guide_legend(title = "Program")) +   
-    theme_minimal() +
-    theme(legend.position = "bottom",
-          plot.title = element_text(hjust = 0.5))
   
-# Combines graphs next to each other
-grid.arrange(
-  arrangeGrob(model1),
-  arrangeGrob(model2),
-  ncol = 2,
-  top = "Impact of Learning hours on R Skills Change"
-)
+
+# Apply within transformation 
+  
+model2 <-  ggplot(participants, 
+                  aes(x = learning_hours, y = r_skills_change, 
+                       color = program)) +             # differentiate color by program
+  
+               geom_point() +                           # First layer: scatter plot   
+  
+               geom_smooth(method = "lm", se = FALSE) + # Second layer: Slope per program
+  
+                  labs(title = "Fixed effect",
+                   x = "Learning hours",
+                   y = "R Skills Change") +
+                  guides(color = guide_legend(title = "Program")) +   
+                  theme_minimal() +
+                  theme(legend.position = "bottom",
+                        plot.title = element_text(hjust = 0.5))
+  
+
+
+###############   Combines graphs next to each other  ########################## 
+
+
+# Grid.arrange allows you to place several graphs next to each other
+
+  grid.arrange(
+    arrangeGrob(model1),     # add graph 1
+    
+    arrangeGrob(model2),     # add graph 2
+    
+    ncol = 2,                # define amount of columns
+    
+    top = "Impact of Learning hours on R Skills Change"
+  )
 
 
 
 ##########################  Hypothesis Test  ###################################
   
   
-#########################  one sided T-test ########################    
+#########################  One sided T-test ########################    
 
 # Null Hypothesis (H0): The mean change in R skills is less than or equal to 5.
 # Alternative Hypothesis (H1): The mean change in R skills is greater than 5.
-  
-  population_mean <- 5 # value we assume to be population mean
 
-  t_test <- t.test(participants$r_skills_change, mu = population_mean, alternative = "greater") # one sided T-test
+
+ # value we assume to be population mean
+
+  population_mean <- 5                             
+
+
+# Numerical output
+
+  t_test <- t.test(participants$r_skills_change, mu = population_mean, alternative = "less") 
   
   t_test
-
   
+ 
 
-# Create a density plot to illustrate the one-sample t-test results
+
+# To make comparisons of means more tangible we compute sample mean explicitly 
+  
+  sample_mean <- mean(participants$r_skills_change)
+
+
+# Graphical output
   
   ggplot(participants, aes(x = r_skills_change)) +
     geom_density(fill = "lightblue", alpha = 0.5) +
     
     # This resembles our H0 line 
-    geom_vline(xintercept = population_mean, linetype = "dashed", color = "darkblue", size = 1) +
-    annotate("text", x = population_mean+1.3, y = 0.02, label = "Null Hypothesis", color = "black", vjust = -7) +
+    geom_vline(xintercept = population_mean, linetype = "dashed", color = "darkgreen", size = 1) +
+    annotate("text", x = population_mean + 0.8 , y = 0.02, label = "Null Hypothesis", color = "darkgreen", vjust = -7) +
     
-    # This resembles sample mean
-    geom_vline(xintercept = sample_mean, linetype = "dashed", color = "darkblue", size = 1) +
-    annotate("text", x = sample_mean +1.3, y = 0.02, label = "Sample mean", color = "black", vjust = -7 ) +
+    # This resembles sample mean line
+    geom_vline(xintercept = mean(participants$r_skills_change), linetype = "dashed", color = "darkblue", size = 1) +
+    annotate("text", x = sample_mean - 0.7 , y = 0.02, label = "Sample mean", color = "darkblue", vjust = -2 ) +
     
-    labs(title = "Density Plot with One-Sample t-Test",
+    labs(title = "Is the change in R-skills greater 5?",
          x = "R Skills Change",
          y = "Density") +
     theme_minimal() +
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5))
+  
+  
+# We can reject the null hypothesis, since the mean seems to be smaller than 5 
 
+  
+ 
+# For completion, there exist also a two-sided t-test. 
+  
+# E.g. Is the change in R-skills unequal 0? 
+  
+# H0 : R-skill-change is unequal 0 
+  
+  
 
 ######################### Two-sample T-test ####################################    
   
-# Are the r skill changes of economics and philosophy students different?
+# Goal: Are the r skill changes of economics and philosophy students different?
   
-  philosophy_data <- participants[participants$program == "Philosophy", "r_skills_change"] # selects r_skills_change if the program is philo
-  economics_data <- participants[participants$program == "Economics", "r_skills_change"]
+  # Create subsets for philosophy and economics students
   
-  t_test_result <- t.test(philosophy_data, economics_data) # two sample t-test
+  philosophy_skill_change <- participants[participants$program == "Philosophy", "r_skills_change"] # selects r_skills_change if the program is philo
+  
+  economics_skill_change <- participants[participants$program == "Economics", "r_skills_change"]   # -II- program is economics
   
 
-  # Create a density plot
   
-  combined_data <- data.frame(
-    Program = rep(c("Philosophy", "Economics"), each = c(length(philosophy_data), length(economics_data))),
-    R_Skills_Change = c(philosophy_data, economics_data)
+# Now we test whether the means of the two groups are equal or not 
+  
+  t_test_result <- t.test(philosophy_skill_change, economics_skill_change) 
+  
+  
+
+# Create a density plot for illustration
+  
+  # 1) Create a combined data set two plot them in one graph together 
+  
+  combined_data <- data.frame( 
+    Program = rep(c("Philosophy", "Economics"),                                                 # create one column combining philo and economics students in data
+                  times = c(length(philosophy_skill_change), length(economics_skill_change))),  # they have the same number of observations as in original data
+    R_Skills_Change = c(philosophy_skill_change, economics_skill_change)                        # also keep the data we need to analyze changs in r skills
   )
 
+  
+# 2) Create the graph 
+  
   ggplot(combined_data, aes(x = R_Skills_Change, fill = Program)) +
     geom_density(alpha = 0.5) +
     labs(title = "Density Plot of Skills Change by Program",
@@ -223,59 +285,5 @@ grid.arrange(
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5))
   
-
-
-
-  t_test <- t.test(participants$r_skills_change[participants$program == "Economics"], mu = 15, method = "greater") # mu = 20 is the H0 we are testing
-  
-  # H0: mean = 0  would imply there is no change in R skills
-  
-  t_statistic <- t_test_result$statistic
-  
-  critical_values <- c(quantile(t_statistic, c(0.01, 0.05, 0.10)))
-  
-  # Create a data frame for plotting
-  economics_data_df <- data.frame(economics_data)
-  
-  # Plot the density and add vertical lines
-  ggplot(economics_data_df, aes(x = economics_data)) +
-    geom_density() +
-    geom_vline(xintercept = 15, linetype = "dashed", color = "red") +
-    geom_vline(xintercept = critical_values, linetype = "dotted", color = "blue") +
-    labs(title = "Density Plot with Vertical Lines",
-         x = "Economics Data",
-         y = "Density") +
-    theme_minimal()
-  
-  
-  
-  
-  
-  
-  critical_quantiles <- c(0.01, 0.05, 0.10)
-  critical_values <- quantile(density(economics_data_df$economics_data), critical_quantiles)
-  
-  # Create a data frame for plotting
-  economics_data_df <- data.frame(economics_data = participants$r_skills_change)
-  
-  # Plot the density and add vertical lines
-  ggplot(economics_data_df, aes(x = economics_data)) +
-    geom_density() +
-    
-    # Add vertical lines for the mean and critical values
-    geom_vline(xintercept = mean(participants$r_skills_change), linetype = "dashed", color = "red") +
-    geom_vline(xintercept = critical_values, linetype = "dotted", color = "blue") +
-    
-    # Add horizontal lines for significance levels
-    geom_hline(yintercept = c(quantile(density(economics_data_df$economics_data)$x, 0.99),
-                              quantile(density(economics_data_df$economics_data)$x, 0.95),
-                              quantile(density(economics_data_df$economics_data)$x, 0.90)),
-               linetype = "dotted", color = "green") +
-    
-    labs(title = "Density Plot with Vertical Lines",
-         x = "Economics Data",
-         y = "Density") +
-    
-    theme_minimal()
   
   
