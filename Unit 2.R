@@ -4,13 +4,16 @@
 ################################################################################
 
 
-###################### Start with loading the packages ##########################
+######################   Start with loading packages ##########################
 
-# Packages enable specific codes which can help you achieving your goal faster
 
-  install.packages("tidyverse") # install package - can also be searched for in the right bottom window under "packages"
+  install.packages("tidyverse") 
 
-  library(tidyverse) # if installed you can simply recall it
+# install package - can also be searched for in the right bottom window under "packages"
+
+
+# if installed you can simply recall packages
+  library(tidyverse) 
 
   # Tip: 
   # Look into the bottom right window and go to "Packages" -> "Install" and then
@@ -28,8 +31,9 @@
 
   getwd() # find out where you are 
   
-  setwd("C:\\Users\\hamassen\\Documents\\GitHub\\R-Tutorium") # determine where your files are
+  setwd("C:\\Users\\Hannah\\Documents\\GitHub\\R-Tutorium") # determine where your files are
   setwd("C:/Users/hamassen/Documents/GitHub/R-Tutorium")
+
 
 # Note: Windows user have to add a second slash "\\" or change toward forward slash "/"
 
@@ -39,15 +43,21 @@
   data <- read.csv("personal_test.csv") 
   
   View(data) # opens tab showing data
-
-# load data such that we can use it 
   
-  data <- read.csv("personal_test.csv",  sep = ";", header = TRUE) # sep = what seperates data, header = TRUE implies using the var names
+
+# load data such that we can use it
+  
+  data <- read.csv("personal_test.csv",  sep = ";", header = TRUE) 
+  
+  # sep = what seperates data, 
+  # header = TRUE implies using the var names
 
 # attention how data is stored:  
   # for csv: read.csv("datasetname.csv")  
   # for xlsx: read.xlsx("datasetname.xlsx")
   # for dta: read_dta("datasetname.dta")
+  
+  
 
 # 1) Understand the data you're using!
 
@@ -81,7 +91,10 @@
 
   
   data_W <- data %>% 
-    filter(Gender == "W") # creates a subset containing only persons with an assigned W 
+    filter(Gender == "W") 
+  
+  # filter = creates a subset containing only observations where condition is true
+  
   
   data_M <- data %>% 
     filter(Gender == "M")
@@ -92,7 +105,7 @@
   
 ############################## Summarize data  ################################# 
   
-# obtain the mean 
+# Mean 
   
   mean_age_W <- data_W %>%
     summarize(mean_age = mean(Age)) # calculate the mean_x = mean(x) 
@@ -105,7 +118,8 @@
   # depending on function you receive specified output for a certain input
   # E.g. mean function = for a certain variable (Age) you get as output the mean of Age
 
-# get standard deviation
+  
+# Standard deviation
   
   sd_age_W <- data_W %>%
     summarize(sd_age = sd(Age))
@@ -113,7 +127,7 @@
   sd_age_M <- data_M %>%
     summarize(sd_age = sd(Age))
   
-  # here we use the function sd() to obtain the standard deviation of Age
+  # here we use the function sd() to obtain the standard deviation of age
   
   
 # Look at the output
@@ -147,6 +161,7 @@
 # "Place where variable is stored"  <- mutate(dataset, new_variable = ifelse(condition, 0, 1)) 
 
 
+  
 ############# Packages are not always the better option! #######################
  
 # Remember: Don't make easy things hard :) 
@@ -164,6 +179,7 @@
   sd_age_W <- sd(data_W$Age)
   
   sd_age_M <- sd(data_M$Age)
+  
 
 # there are not really wrong ways, but more and less efficient ways
 
@@ -171,9 +187,9 @@
     
     group_by(Gender) %>%             # for each group are the next steps computed
     
-    summarise(mean = mean(Age),      # compute mean
-              
-              sd = sd(Age))          # compute standard deviation
+    summarise(mean = mean(Age),      
+              sd = sd(Age))          
+  
   
   # immediately obtain an overview of the age by its mean and standard deviation
   
@@ -187,7 +203,28 @@
  
   # Breakdown: save(datset name in R, file = "(specifiy how it shall be stored).(dataset type)")
   
-
+  
+  # as dta file
+  
+  save(final_data, file = "final_data.dta") 
+  # will not produce an error, but cannot be used
+  
+  
+  # Load package for .dta data
+  library(haven) 
+  
+  fail <- read_dta("final_data.dta")
+  
+  
+  # predefining paths can be helpful 
+  
+  path <- "C:/Users/Hannah/Documents/GitHub/R-Tutorium" # tell R where to store data
+  
+  
+  write_dta(final_data, file.path(path, "final_data.dta"))
+  
+  succesful <- read_dta("final_data.dta")
+  
 
 ############################ Keep data clean ###################################
 
@@ -195,7 +232,8 @@
   
   mean_age_W <- round(mean_age_W, digits = -1) # remove the decimal after comma 
   
-  mean_age_M <- round(mean_age_M, digits = -1)
+  mean_age_M <- round(mean_age_M, digits = 1)
+  
 
  # Remove objects you don't need anymore 
   
