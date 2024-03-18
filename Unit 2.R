@@ -63,9 +63,9 @@
   # header = TRUE implies using the var names
 
 # attention how data is stored:  
-  # for csv: read.csv("datasetname.csv")  
+  # for csv: read.csv("datasetname.csv")
   # for xlsx: read.xlsx("datasetname.xlsx")
-  # for dta: read_dta("datasetname.dta")
+  # for dta: read_dta("datasetname.dta")  
   
   
 
@@ -264,10 +264,41 @@
   rm(data_Gender)
   
   rm(list = ls()) # remove everything in environment
-
-
-############################################################################### 
   
+  # Remove last column in dataset 
+  
+  reduced_data <- subset(
+                final_data,                        # subset command selects columns
+                select = -c((ncol(final_data))))   #  -c indicates deleting last column from final data
+  
+  
+  # Remove range of columns in dataset
+  
+  reduced_data <- subset(final_data, 
+                         select = -c((ncol(final_data)-1):ncol(final_data))) 
+                      
+  # (n-1) : n columns get deleted = last two 
+  
+  
+  
+########################   Missing variables  ################################## 
+  
+
+  # Drop whole observation 
+  
+  vector_NA <- c(2, NA, 4, 6,34, NA, NA)
+  
+  vector_cleaned <- na.omit(vector_NA)
+  
+  # Dropping whole observation is only advisable if the variable missing is very important to you
+  # e.g. if its your variable of interest to explain
+  
+  
+  # A more elegant way is the option "na.rm"
+  
+  mean_NA <- mean(vector_NA)   # we cannot leave NA's in sample
+  
+  mean_clean <- mean(vector_NA, na.rm = TRUE)  # we remove them with na.rm
   
   
   
