@@ -40,14 +40,24 @@
   
 ############################# Load data  #######################################
   
-  data <- read.csv("personal_test.csv") 
+  data <- read.csv("./data/personal_test.csv") 
+  
+  # Paths and Subfolders: 
+  # I store my data in a subfolder called "data". 
+  # As the path chosen in setwd leads only to the general Tutorium folder I have to tell R to use the datafolder
+  
+  # ./ = use prespecified path
+  # data/ = specify the subfolder we want to access
+  # personal_test.csv = dataset we want to laod
+  
+  
   
   View(data) # opens tab showing data
   
 
 # load data such that we can use it
   
-  data <- read.csv("personal_test.csv",  sep = ";", header = TRUE) 
+  data <- read.csv("./data/personal_test.csv",  sep = ";", header = TRUE) 
   
   # sep = what seperates data, 
   # header = TRUE implies using the var names
@@ -130,6 +140,23 @@
   # here we use the function sd() to obtain the standard deviation of age
   
   
+# median 
+  
+  med_age_W <- data_W %>% 
+    summarize(med_age = median(Age))
+  
+
+  
+# quartiles (25th, 75th)
+  
+  q25_age <- quantile(data$Age, probs = 0.25)
+  
+  q75_age <- quantile(data$Age, probs = 0.75)
+  
+  iqr <- data %>% 
+    summarize(iqr = IQR(Age))
+    
+    
 # Look at the output
   
   print(mean_age_W$mean_age)
@@ -172,10 +199,6 @@
   
   mean_age_M <- mean(data_M$Age)
   
-  mean_age_W
-  mean_age_M
-  
-  
   sd_age_W <- sd(data_W$Age)
   
   sd_age_M <- sd(data_M$Age)
@@ -188,12 +211,14 @@
     group_by(Gender) %>%             # for each group are the next steps computed
     
     summarise(mean = mean(Age),      
-              sd = sd(Age))          
+              sd = sd(Age),
+              var = var(Age))          
   
   
   # immediately obtain an overview of the age by its mean and standard deviation
   
  
+  
 ################################ Save data #####################################
   
   # as csv file 
@@ -218,12 +243,11 @@
   
   # predefining paths can be helpful 
   
-  path <- "C:/Users/Hannah/Documents/GitHub/R-Tutorium" # tell R where to store data
+  path_data <- "C:/Users/hamassen/Documents/GitHub/R-Tutorium/Data" # tell R where to store data
   
+  write_dta(final_data, file.path(path_data, "final_data.dta"))
   
-  write_dta(final_data, file.path(path, "final_data.dta"))
-  
-  succesful <- read_dta("final_data.dta")
+  succesful <- read_dta("./Data/final_data.dta")
   
 
 ############################ Keep data clean ###################################
@@ -232,7 +256,7 @@
   
   mean_age_W <- round(mean_age_W, digits = -1) # remove the decimal after comma 
   
-  mean_age_M <- round(mean_age_M, digits = 1)
+  mean_age_M <- round(mean_age_M, digits = 2) # allow to decimals after comma
   
 
  # Remove objects you don't need anymore 
