@@ -1,0 +1,136 @@
+\documentclass[12pt]{article}  % Define class of document
+\usepackage{geometry}          % Layout options
+\usepackage{graphicx}          % Support for including graphics
+\usepackage{setspace}          % Change space between linings
+\usepackage[T1]{fontenc}       % Fonts
+\usepackage[font=small, labelfont=bf]{caption}  % Option for captions
+\usepackage[english]{babel}    % Grammar check
+\usepackage{sectsty}           % Write own commands
+\usepackage{url}               % Allows usage of links
+\usepackage{float}             % Fix placement of figures/tables
+\usepackage{placeins}          % -||-
+\usepackage{amsmath}           % Mathematical terms
+\usepackage{pdfpages}          % Include pdfs (e.g. graphic stored as pdf)
+\usepackage{subfigure}         % Place figures next to each other
+\usepackage[hidelinks]{hyperref}   % Interactive references       
+\usepackage[backend=biber,style=apa]{biblatex}   % Citation
+
+
+% Title of document
+\title{Introduction to Overleaf}
+\author{Hannah Massenbauer}
+\date{\today}
+
+% Surpress inward shift of the first word in a new paragraph
+\setlength{\parindent}{0pt}
+
+% Change the count of pages
+\setcounter{page}{1}
+
+% Double spacing between lines
+\doublespacing
+
+% Add source of references
+\addbibresource{bib.bib}
+
+% For that reason create another empty file where you can copy paste "Bibtex" citation from e.g. google scholar. It is important that you change the file to a "x.bib" file.
+
+% Until now all commands were used to define settings of looks and functions we want to use 
+
+
+% Now the actual document starts
+\begin{document}
+
+% Print now the predefined title 
+\maketitle
+
+\section{First Caption}
+Now you can start writing. Overleaf is not a what you see is what you do software like Google docs, but more similar to the logic of R. We give the software input and it processes it to a nicely looking pdf. \\  % The \\ tells overleaf to make a proper break after your paragraph
+
+To get the pdf document, click on \textit{recompile}.  % \textit{} is another command to make a word / sentence written in italic
+Then you can download your pdf by clicking on the \textbf{download symbol} right next to the green recompile button. % \textbf{} makes it written boldly 
+
+\subsection{Subsection}
+You can create a stratified section structure by simply using \textbackslash subsection. Note the "\textbackslash" always indicates that we want to write a command.  \\ 
+
+If you try to compile a text, that includes some errors, meaning you miss some information or used the wrong syntax than you will see a redly marked number next to the recompile button. Often errors can be neglected and have no impact on the compiled pdf. But some errors are serious and cannot be neglected. You will know when you encounter such an error, but don't worry there is no error where no solution exists. \\
+
+\underline{Reasons for errors:}   % command to underline word
+\begin{enumerate}     % Create a list with numbers
+    \item Syntax error. You either have a tipping error or unclosed bracket.
+    \item You are missing a package. Sometimes you find a command online but you cannot use it without loading a certain package
+    \item  Overleaf, has also sometimes certain signs assigned to own a certain function. For example the "\&" sign cannot be used without marking it with the backward slash. Such signs are also \% and \$
+    \item Storing graphs and tables in folders can lead quickly to confusion. To keep your workspace tidy it is advisable to create folders in the left bar (similar to the environment window in R). But like accessing or storing your data from R on your laptop required a specific part, analogously it is with overleaf. Sometimes if you shift or generate a folder but forget to adapt the path code in you { includegraphics[]{}} you will not be able to display the graphs. 
+\end{enumerate}
+
+
+\section{Graphs}
+To include graphs we need a new command. There are several ways, but my preferred way is the \textit{includegraphics}. 
+
+
+\begin{figure}[htb!]                  % htb! is my favorite way to ensure that the graph stays exactly where I want it to be
+    \centering                        % display graph centered
+    \includegraphics[scale=0.75]{Avg perc L in top10K.pdf}  % the graph can also be store as e.g. jpg
+    \caption{Caption}
+    \label{fig:enter-label}           % Required to refer to this graph
+\end{figure}
+\FloatBarrier                         % Ensures following text to be placed after graph 
+
+There are different ways to embed graphics into your overleaf document, but the documentation online is usually pretty helpful. And in case, Chatgpt knows Overleaf as well..
+
+
+\begin{section}{Math}
+To write mathematical expressions, you have multiple options. The first option is to use the command $begin\{equation\}$
+   \begin{equation}
+    \hat{y} = \alpha + \beta \cdot x_i - \epsilon
+   \end{equation} 
+This approach is nice since your equations are immediately numerated. \\
+
+Another approach is to use the \$-sign. In between two \$ signs you can write mathematical terms as well:  $ \Bar{x} = \frac{1}{N} \sum^n_{i=1} x_i $. This embedds the mathematical terms immediately into the sentence. If you want to highlight your equations more explicitly than use two \$ signs immediately next to each other and then your equation will be displayed centered and standing alone in the line. 
+   $$ \Bar{x} = \frac{1}{N} \sum^n_{i=1} x_i $$
+
+\end{section}
+    
+
+
+\subsection{Tables}
+Text and graphics are nice, but showing numbers can be an important part of your work too. Mostly you will present numbers in a table. For that purpose we use the following: 
+
+\begin{table}[htb!]             % indicates we want to use a table
+    \centering                  % centered
+    \begin{tabular}{c|c}        % we have to centered (c) columns. By adding l (left) or center (c) we add another columns
+    \hline                      % adds horizontal line
+       1  &  2\\                % the \\ introduces a jump into the next row / line  
+       3  &  4 \\               % between each column we have a & sign
+       \hline   \hline          % You can create also a double line 
+    \end{tabular}
+    \caption{Caption}           % caption can be place below or above (see below)
+    \label{tab:my_label}
+\end{table}
+
+Most software have options to export the results into overleaf. For example in Unit 4 we use the \textit{stargazer package} with which we get an output that we can copy paste into an overleaf file. To keep things tidy I would recommend to create a new file, named with the regression title and include that file into your main document. \\
+
+Below you can find an example, how R gave me the regression output:
+\begin{figure}[htb!]
+    \centering
+    \caption{Regression Results} 
+    \label{tab:reg}         
+    \include{regression table}       % include is a very general command that includes another file from your environment
+\end{figure}
+\FloatBarrier
+
+\begin{section}{Citation}
+Citing correctly can eat up a lot of time. One of the main reason I love Overleaf is its handy citation options. As soon as you have created a file\footnote{I name mine always bib.bib. The .bib ending is crucial to let Overleaf know that this is the bibliography file!} % This is btw how you create a footnote in overleaf 
+you can add sources. I can recommend to copy from google scholar immediately the bibtex format and paste it into your bib file. If you have done that + added the bibliography with \textbackslash addbibresource{bib.bib} you can start citing. \\
+
+Citing after a sentence: \\
+My favorite paper currently discusses advances in the DiD estimation (\cite{de2022difference}) \\
+Citing within a sentence: \\
+My favorite econometricians, \textcite{de2022difference} produce many new DiD papers. 
+    
+\end{section}
+
+\newpage
+\printbibliography % Print bibliography
+
+\end{document}
