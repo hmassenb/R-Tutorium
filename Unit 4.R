@@ -18,7 +18,7 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 ############################ Get to know data ##################################
 
 
-  setwd("C:\\Users\\hamassen\\Documents\\GitHub\\R-Tutorium\\Data")
+  setwd("C:\\Users\\hanna\\Documents\\GitHub\\R-Tutorium\\Data")
   data <- load("participants.csv")
 
 
@@ -71,17 +71,20 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
   # Estimate OLS
 
-  linear_model <- lm(log_skill_change ~ tutorium_attendance, 
+  linear_model <- lm(r_skills_change ~ tutorium_attendance, 
                      data = participants)
 
 # Breakdown: 
-# 1) Estimated value (y_hat) = r_skills_change  
-# 2) Explanatory / independent variable (x_i) = tutorium attendance
-# 3) data = our dataset (participants)
+# 1) Command = lm 
+# 2) Estimated value (y_hat) = r_skills_change  
+# 3) Explanatory / independent variable (x_i) = tutorium attendance
+# 4) data = our dataset (participants)
+# 5) Results are stored in linear_model
   
 
   # Print the regression outcome 
-  summary(linear_model)
+  linear_model              # intercept and coefficient 
+  summary(linear_model)     # intercept, coeff, se, t, R^2, F
 
   
   
@@ -89,7 +92,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
   # We can add multiple explanatory variables with "+"
   
-  linear_model_2 <- lm(log_skill_change ~ tutorium_attendance + learning_hours, data = participants)
+  linear_model_2 <- lm(r_skills_change ~ tutorium_attendance + learning_hours, 
+                       data = participants)
   
   summary(linear_model_2)
   
@@ -100,7 +104,7 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 # Efficiency tip:   
   # Export regression results to LaTeX for Overleaf
   
-  stargazer(linear_model_2, 
+  stargazer(linear_model_2,                        # recall regression output
             title = "Regression Results",
             header = FALSE, 
             type = "latex",                         # to where do we want export
@@ -116,13 +120,7 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
             out = "regression_results.docx")
   
   
-  rm(linear_model, linear_model_2, data, resid2, residuals)  # clean up 
-  
-  
-  
-
-  
-  #################  Depict linear regression graphically #################  
+#################  Depict linear regression graphically #################  
   
   # 1) Run model 
     
@@ -191,7 +189,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
   # When the errors diverge a lot from the line than the standard errors in 
   # a finite sample can become imprecise. 
-  # This is important for e.g. t-statistics, which we interpret as "significant" or not. 
+  # This is important for e.g. t-statistics, which we interpret as "significant" 
+  # or not. Furthermore, asymptotic properties rely on that assumption.  
   
 
   
@@ -239,20 +238,17 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
   
   r_sqr_2 <- summary(model2)$r.squared
-  
   r_sqr_2
   
   
   # Add both scatter plots in one graph and show difference in R^2 
   
-  
-  
+
   
 
 ##########################  Hypothesis Test  ###################################
   
-  
-#########################  One sided T-test ########################    
+#  One sided T-test
 
 # Null Hypothesis (H0): The mean change in R skills is less than or equal to 5.
 # Alternative Hypothesis (H1): The mean change in R skills is greater than 5.
@@ -266,11 +262,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 # Numerical output
 
   t_test <- t.test(participants$r_skills_change, mu = population_mean, alternative = "less") 
-  
   t_test
   
- 
-
 
 # To make comparisons of means more tangible we compute sample mean explicitly 
   
@@ -308,7 +301,10 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
 # H0 : R-skill-change is unequal 0 
   
-  
+  t_test2 <- t.test(participants$r_skills_change, 
+                    mu = population_mean,
+                    alternative = "two.sided") 
+  t_test2
 
 ######################### Two-sample T-test ####################################    
   
@@ -351,38 +347,13 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5))
   
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
+   
 ################################################################################
 #                                 Appendix                                     #
 ################################################################################
   
-  
-  
-  
 ########################### Fixed Effects Model ################################ 
-  
   
   # Story: 
   # Students from different programs have different skills and experience
