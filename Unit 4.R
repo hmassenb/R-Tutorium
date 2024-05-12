@@ -25,6 +25,13 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 # take a look at data
 
   summary(participants)
+  
+  stargazer(participants, 
+            type = "latex", 
+            title="Descriptive statistics",
+            digits=1, 
+            out="descriptives.tex")
+  
 
 # what can you say about median, min, max, outliers?
   
@@ -95,8 +102,16 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   linear_model_2 <- lm(r_skills_change ~ tutorium_attendance + learning_hours, 
                        data = participants)
   
+  
+  # More ways to print outcome 
+  
   summary(linear_model_2)
   
+  linear_model_2$coefficients
+  
+  summary(linear_model_2)$coefficients
+  
+  coef <- coefficients(linear_model_2)
   
   
 #################  Export regression table  ################# 
@@ -108,7 +123,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
             title = "Regression Results",
             header = FALSE, 
             type = "latex",                         # to where do we want export
-            out = "regression_results.tex")
+            out = "regression_results.tex",
+            covariate.labels = c("Tutorium Attendance", "Hours studied", "Intercept"))
   
   
   # Export regression results to Word
@@ -118,6 +134,10 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
             header = FALSE, 
             type = "text", 
             out = "regression_results.docx")
+  
+  # Further, sources with help for Stargazer: 
+  # 1) https://www.rdocumentation.org/packages/stargazer/versions/5.2.3/topics/stargazer
+  # 2) https://libguides.princeton.edu/R-stargazer
   
   
 #################  Depict linear regression graphically #################  
@@ -143,7 +163,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   # Reflects the average value for the change in R skills one can expect, 
   # depending on the amount of learning hours
   
-  # Interpretation: upward slope = the more you learn the better your r skills will become
+  # Interpretation: upward slope = the more you learn 
+  # the better your r skills will become all else equal 
   
    
    
@@ -153,7 +174,6 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   # Extract residuals from model 
   
   residuals <- residuals(model)   
-  
   
   # Where are the residuals now? 
   arrows(
@@ -173,16 +193,14 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 
 
   # Why care about distribution of residuals? 
-  # 4) Gauss-Markov Assumption: Heteroskedasticity  
-  
+  # Gauss-Markov Assumption: Heteroskedasticity  
   # When the variance increases depending on the x variable, 
   # then our OLS estimator beta will be inconsistent 
-
-  
+  # Could result in more significant results than they should 
 
   
   # More reasons why we care about residuals..
-  # 5)  Gauss-Markov  Assumption: Normality   
+  # 5) multiple linear regression assumption: Normality   
   
   qqnorm(residuals)
   qqline(residuals) 
@@ -197,7 +215,7 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 ################  How much can we explain with our model   #####################  
   
   
-  # Hello R-squared
+  # R-squared
   
   summary_model <- summary(model)
   
@@ -205,16 +223,16 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   r_squared <- summary_model$r.squared
   
   
+  # Predicted value (y^{hat})
   predicted_values <- predict(model)
   
   # Add text annotation for R-squared
   r_squared <- summary(model)$r.squared
+  
   text(x = max(participants$r_skills_change) * 0.8, y = max(predicted_values) * 0.9,
        label = paste("R-squared =", round(r_squared, 2)))
  
 
-  
-  
   
 # Correlation != Coefficient from OLS regression 
   
@@ -250,9 +268,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
 #  One sided T-test
 
-# Null Hypothesis (H0): The mean change in R skills is less than or equal to 5.
-# Alternative Hypothesis (H1): The mean change in R skills is greater than 5.
-
+# Null Hypothesis (H0): The mean change in R skills is greater than or equal to 5.
+# Alternative Hypothesis (H1): The mean change in R skills is less than 5.
 
  # value we assume to be population mean
 
@@ -261,7 +278,9 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
 
 # Numerical output
 
-  t_test <- t.test(participants$r_skills_change, mu = population_mean, alternative = "less") 
+  t_test <- t.test(participants$r_skills_change,                                # command t.test
+                   mu = population_mean,                                        # what is the reference value
+                   alternative = "less")                                        # define alternative hypothesis
   t_test
   
 
@@ -276,12 +295,21 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
     geom_density(fill = "lightblue", alpha = 0.5) +
     
     # This resembles our H0 line 
-    geom_vline(xintercept = population_mean, linetype = "dashed", color = "darkgreen", size = 1) +
-    annotate("text", x = population_mean + 0.8 , y = 0.02, label = "Null Hypothesis", color = "darkgreen", vjust = -7) +
+    geom_vline(xintercept = population_mean, 
+               linetype = "dashed", 
+               color = "darkgreen", 
+               size = 1) +
+    annotate("text", x = population_mean + 0.8 , y = 0.02,
+             label = "Null Hypothesis",
+             color = "darkgreen", vjust = -7) +
     
     # This resembles sample mean line
-    geom_vline(xintercept = mean(participants$r_skills_change), linetype = "dashed", color = "darkblue", size = 1) +
-    annotate("text", x = sample_mean - 0.7 , y = 0.02, label = "Sample mean", color = "darkblue", vjust = -2 ) +
+    geom_vline(xintercept = mean(participants$r_skills_change), 
+               linetype = "dashed",
+               color = "darkblue",
+               size = 1) +
+    annotate("text", x = sample_mean - 0.7 , y = 0.02,
+             label = "Sample mean", color = "darkblue", vjust = -2 ) +
     
     labs(title = "Is the change in R-skills greater 5?",
          x = "R Skills Change",
@@ -291,20 +319,19 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
           plot.title = element_text(hjust = 0.5))
   
   
-# We can reject the null hypothesis, since the mean seems to be smaller than 5 
+# We cannot reject the null hypothesis, since the mean seems to be smaller than 5 
 
   
- 
-# For completion, there exist also a two-sided t-test. 
-  
-# E.g. Is the change in R-skills unequal 0? 
-  
-# H0 : R-skill-change is unequal 0 
+  # For completion, there exist also a two-sided t-test. 
+  # E.g. Is the change in R-skills unequal 0? 
+  # H0 : R-skill-change is unequal 0 
   
   t_test2 <- t.test(participants$r_skills_change, 
                     mu = population_mean,
-                    alternative = "two.sided") 
-  t_test2
+                    alternative = "two.sided")                                  # use two.sided option 
+  t_test2 
+ 
+
 
 ######################### Two-sample T-test ####################################    
   
@@ -329,9 +356,9 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   # 1) Create a combined data set two plot them in one graph together 
   
   combined_data <- data.frame( 
-    Program = rep(c("Philosophy", "Economics"),                                                 # create one column combining philo and economics students in data
-                  times = c(length(philosophy_skill_change), length(economics_skill_change))),  # they have the same number of observations as in original data
-    R_Skills_Change = c(philosophy_skill_change, economics_skill_change)                        # also keep the data we need to analyze changs in r skills
+    Program = rep(c("Philosophy", "Economics"),                                   # create one column combining philo and economics students in data
+    times = c(length(philosophy_skill_change), length(economics_skill_change))),  # they have the same number of observations as in original data
+    R_Skills_Change = c(philosophy_skill_change, economics_skill_change)          # also keep the data we need to analyze changs in r skills
   )
 
   
@@ -428,11 +455,8 @@ library(gridExtra) # used to place graphs in certain order e.g. next to each oth
   
   grid.arrange(
     arrangeGrob(model1),     # add graph 1
-    
     arrangeGrob(model2),     # add graph 2
-    
     ncol = 2,                # define amount of columns
-    
     top = "Impact of Learning hours on R Skills Change"
   )
   
